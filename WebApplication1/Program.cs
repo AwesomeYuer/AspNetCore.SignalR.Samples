@@ -1,24 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-namespace WebApplication1
+namespace SignalRSamples
 {
+    using System.IO;
+    using System.Net;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using SignalRSamples.Hubs;
+
     public class Program
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+            var config = new ConfigurationBuilder()
+                .AddCommandLine(args)
+                .Build();
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            var host = new WebHostBuilder()
+                .UseConfiguration(config)
+                .UseSetting(WebHostDefaults.PreventHostingStartupKey, "true")
+                .ConfigureLogging
+                    (
+                        (factory) =>
+                        {
+                            factory.AddConsole();
+                        }
+                    )
+                .UseKestrel
+                    (
+                        options =>
+                        {
+                            // Default port
+                            options.ListenLocalhost(5000);
+
+                            // Hub bound to TCP end point
+                            options.Listen
+                                        (
+                                            IPAddress.Any
+                                            , 9001
+                                            , (builder) =>
+                                            {
+                                                builder.UseHub<Chat>();
+                                            }
+                                        );
+                        }
+                    )
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
+            host.Run();
+        }
     }
 }
