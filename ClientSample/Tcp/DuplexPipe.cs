@@ -1,5 +1,4 @@
-﻿namespace Microshaoft
-    //System.IO.Pipelines
+﻿namespace Microshaoft //System.IO.Pipelines
 {
     using System.IO.Pipelines;
     internal class DuplexPipe : IDuplexPipe

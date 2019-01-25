@@ -1,12 +1,8 @@
-﻿
-
-namespace Microshaoft
+﻿namespace Microshaoft
 {
     using System;
-    using System.Collections.Generic;
     using System.IO.Pipelines;
     using System.Net.Sockets;
-    using System.Text;
     public class SocketReceiver
     {
         private readonly Socket _socket;

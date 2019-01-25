@@ -1,14 +1,12 @@
 namespace Microshaoft
 {
+    using Microsoft.AspNetCore.Connections;
+    using Microsoft.AspNetCore.SignalR.Client;
+    using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microshaoft;
-    using Microsoft.AspNetCore.Connections;
-    using Microsoft.AspNetCore.SignalR.Client;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyInjection.Extensions;
     public static class TcpHubConnectionBuilderExtensions
     {
         public static IHubConnectionBuilder WithEndPoint(this IHubConnectionBuilder builder, Uri uri)
